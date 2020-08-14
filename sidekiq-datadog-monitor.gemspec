@@ -1,16 +1,14 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "sidekiq/datadog/monitor/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "sidekiq-datadog-monitor"
   spec.version       = Sidekiq::Datadog::Monitor::VERSION
-  spec.authors       = ["TODO: Write your name"]
-  spec.email         = ["56920003+oleksandra-k@users.noreply.github.com"]
+  spec.authors       = ["aleksa_castle"]
+  spec.email         = ["oleksandra.k@matic.com"]
 
   spec.summary       = %q{A gem to gather and send sidekiq jobs metrics to datadog}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
   spec.license       = "MIT"
 
   # Specify which files should be added to the gem when it is released.
@@ -25,4 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.17"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_dependency "sidekiq", ">= 2.2.1"
+  spec.add_dependency "dogstatsd-ruby"
 end
