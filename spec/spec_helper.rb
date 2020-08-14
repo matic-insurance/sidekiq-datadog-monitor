@@ -1,5 +1,8 @@
 require "bundler/setup"
 require "sidekiq/datadog/monitor"
+require 'sidekiq-scheduler'
+require 'sidekiq/api'
+require 'sidekiq'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

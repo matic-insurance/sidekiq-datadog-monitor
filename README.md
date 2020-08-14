@@ -1,15 +1,14 @@
 # Sidekiq::Datadog::Monitor
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/sidekiq/datadog/monitor`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Library that gather sidekiq jobs metrics (currently, only size and latency)
+and send it to datadog
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'sidekiq-datadog-monitor'
+gem 'sidekiq-datadog-monitor', '0.0.1'
 ```
 
 And then execute:
@@ -22,7 +21,31 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To start sending metrics
+
+```ruby
+# Import the library
+require 'sidekiq/datadog/monitor/data'
+
+# Initiate a Sidekiq::Datadog::Monitor client instance.
+Sidekiq::Datadog::Monitor::Data.initialize!(
+    {agent_host: 'localhost', 
+     agent_port: 8125,
+     env: 'production',    # optional
+     tag: 'tag',           # optional  
+     queue: 'queue name',  # optional
+     cron: "*/30 * * * *" # default: "*/1 * * * *"
+     } 
+    )
+
+```
+`agent_host` and `agent_port` instantiate DogStatsD client 
+
+`env`, `tag`, `queue` settings for background job that will gather and send Sidekiq metrics
+
+`cron` - schedule settings for background job that will gather and send Sidekiq metrics
+
+
 
 ## Development
 

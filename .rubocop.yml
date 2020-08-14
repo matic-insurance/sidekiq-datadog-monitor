@@ -1,0 +1,136 @@
+require:
+  - rubocop-rspec
+  - rubocop-rails
+
+# This is the default configuration file. Enabling and disabling is configured
+# in separate files. This file adds all other parameters apart from Enabled.
+
+#Example: https://github.com/bbatsov/rubocop/blob/master/config/default.yml
+
+# Common configuration.
+AllCops:
+  Include:
+    - "**/*.builder"
+    - "**/*.gemspec"
+    - "**/*.god"
+    - "**/*.mspec"
+    - "**/*.opal"
+    - "**/*.pluginspec"
+    - "**/*.podspec"
+    - "**/*.rabl"
+    - "**/*.rake"
+    - "**/*.rbuild"
+    - "**/*.rbw"
+    - "**/*.rb"
+    - "**/*.rbx"
+    - "**/*.ru"
+    - "**/*.ruby"
+    - "**/*.spec"
+    - "**/Gemfile"
+  Exclude:
+    - "Rakefile"
+    - "bin/setup"
+
+  DefaultFormatter: progress
+  DisplayCopNames: false
+  DisplayStyleGuide: false
+  StyleGuideBaseURL: https://github.com/bbatsov/ruby-style-guide
+  ExtraDetails: false
+  StyleGuideCopsOnly: false
+  EnabledByDefault: false
+  DisabledByDefault: false
+  UseCache: true
+  MaxFilesInCache: 20000
+  AllowSymlinksInCacheRootDirectory: false
+  TargetRubyVersion: 2.6.6
+  TargetRailsVersion: 5.2
+
+Layout/LineLength:
+  Max: 120
+
+Style/Documentation:
+  Enabled: false
+
+Style/LambdaCall:
+  EnforcedStyle: braces
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Layout/RescueEnsureAlignment:
+  Enabled: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+Lint/AmbiguousBlockAssociation:
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+
+RSpec/MultipleExpectations:
+  Max: 6
+RSpec/ExampleLength:
+  Max: 6
+
+RSpec/FilePath:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 6
+
+RSpec/DescribeClass:
+
+RSpec/LetSetup:
+  Enabled: false
+
+Rails/DynamicFindBy:
+  Enabled: false
+
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
+Lint/MixedRegexpCaptureTypes:
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Style/ExponentialNotation:
+  Enabled: true
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Style/RedundantRegexpCharacterClass:
+  Enabled: true
+
+Style/RedundantRegexpEscape:
+  Enabled: true
+
+Style/SlicingWithRange:
+  Enabled: true
+
+Style/TernaryParentheses:
+  EnforcedStyle: require_parentheses_when_complex
