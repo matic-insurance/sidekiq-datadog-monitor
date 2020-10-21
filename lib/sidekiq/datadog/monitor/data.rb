@@ -1,8 +1,4 @@
-require "sidekiq/datadog/monitor"
-require "sidekiq/datadog/config"
-require 'sidekiq/datadog/monitor/metrics_worker'
-require 'sidekiq-scheduler'
-require 'sidekiq/api'
+
 
 module Sidekiq
   module Datadog
@@ -18,9 +14,13 @@ module Sidekiq
             @queue = options[:queue] || ''
             @cron = options[:cron] || "*/1 * * * *"
 
-            Sidekiq::Datadog::Config.reload_schedule
+          Sidekiq.configure_server do |config|
+            SidekiqScheduler::Scheduler.dynamic = true
 
-            start
+            config.on(:startup) do
+              start
+            end
+          end
 
           rescue StandardError => e
             raise Sidekiq::Datadog::Monitor::Error.new(e.message)
@@ -29,10 +29,10 @@ module Sidekiq
           private
 
           def start
-            Sidekiq.set_schedule('send_metrics', 
+            Sidekiq.set_schedule('send_metrics',
               { "cron"=> cron, 'class' => 'Sidekiq::Datadog::Monitor::MetricsWorker', 'queue' => queue })
           end
-        end 
+        end
       end
     end
   end
