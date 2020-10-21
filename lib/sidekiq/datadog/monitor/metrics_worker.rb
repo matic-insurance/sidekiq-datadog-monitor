@@ -1,4 +1,5 @@
-require "sidekiq/datadog/monitor"
+require "sidekiq/datadog/monitor/data"
+require 'datadog/statsd'
 
 module Sidekiq
   module Datadog
