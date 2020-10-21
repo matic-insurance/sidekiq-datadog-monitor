@@ -1,4 +1,5 @@
-require "sidekiq/datadog/monitor"
+require 'datadog/statsd'
+require 'sidekiq'
 
 module Sidekiq
   module Datadog
@@ -22,13 +23,13 @@ module Sidekiq
 
         def post_queue_size(queue_name, size)
           statsd.gauge('sidekiq.queue.size', size,
-                      tags: ["queue_name:#{queue_name}", "env:#{Data.env}", Data.tag])
+                      tags: ["queue_name:#{queue_name}", "environment:#{Data.env}", Data.tag])
         end
 
         def post_queue_latency(queue_name)
           latency = Sidekiq::Queue.new(queue_name).latency
           statsd.gauge('sidekiq.queue.latency', latency,
-                      tags: ["queue_name:#{queue_name}", "env:#{Data.env}", Data.tag])
+                      tags: ["queue_name:#{queue_name}", "environment:#{Data.env}", Data.tag])
         end
       end
     end
