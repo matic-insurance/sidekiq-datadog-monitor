@@ -15,14 +15,21 @@ module Sidekiq
             @queue = options[:queue] || ''
             @cron = options[:cron] || "*/1 * * * *"
 
-            start
+
+            Sidekiq.configure_server do |config|
+              SidekiqScheduler::Scheduler.dynamic = true
+
+              config.on(:startup) do
+                start
+              end
+            end
           end
 
           def start
-            Sidekiq.set_schedule('send_metrics', 
+            Sidekiq.set_schedule('send_metrics',
               { "cron"=> cron, 'class' => 'Sidekiq::Datadog::Monitor::MetricsWorker', 'queue' => queue })
           end
-        end 
+        end
       end
     end
   end
