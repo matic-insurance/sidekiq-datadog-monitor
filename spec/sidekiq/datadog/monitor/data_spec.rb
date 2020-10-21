@@ -29,9 +29,6 @@ RSpec.describe Sidekiq::Datadog::Monitor::Data do
 
   context 'when options are not provided' do
     before do
-      allow(SidekiqScheduler::Scheduler).to receive(:instance).and_return(instance)
-      allow(instance).to receive(:reload_schedule!)
-      allow(Sidekiq).to receive(:set_schedule)
       described_class.initialize!(options)
     end
 
@@ -41,15 +38,6 @@ RSpec.describe Sidekiq::Datadog::Monitor::Data do
     it { expect(described_class.agent_port).to eql(options[:agent_port]) }
     it { expect(described_class.env).to eql(options[:env]) }
     it { expect(described_class.tag).to eql(options[:tag]) }
-
-    it 'reloads schedule' do
-      expect(SidekiqScheduler::Scheduler).to have_received(:instance)
-      expect(instance).to have_received(:reload_schedule!)
-    end
-
-    it 'schedules worker' do
-      expect(Sidekiq).to have_received(:set_schedule).with('send_metrics', worker_options)
-    end
   end
   
 
