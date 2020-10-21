@@ -1,9 +1,3 @@
-require "sidekiq/datadog/monitor"
-require "sidekiq/datadog/config"
-require 'sidekiq/datadog/monitor/metrics_worker'
-require 'sidekiq-scheduler'
-require 'sidekiq/api'
-
 module Sidekiq
   module Datadog
     module Monitor
@@ -18,9 +12,14 @@ module Sidekiq
             @queue = options[:queue] || ''
             @cron = options[:cron] || "*/1 * * * *"
 
-            Sidekiq::Datadog::Config.reload_schedule
+          Sidekiq.configure_server do |config|
+            binding.pry
+            SidekiqScheduler::Scheduler.dynamic = true
 
-            start
+            config.on(:startup) do
+              start
+            end
+          end
 
           rescue StandardError => e
             raise Sidekiq::Datadog::Monitor::Error.new(e.message)
