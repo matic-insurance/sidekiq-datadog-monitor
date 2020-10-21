@@ -13,7 +13,6 @@ module Sidekiq
             @cron = options[:cron] || "*/1 * * * *"
 
           Sidekiq.configure_server do |config|
-            binding.pry
             SidekiqScheduler::Scheduler.dynamic = true
 
             config.on(:startup) do
