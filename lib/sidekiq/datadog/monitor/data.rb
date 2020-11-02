@@ -3,12 +3,11 @@ module Sidekiq
     module Monitor
       class Data
         class << self
-          attr_reader :agent_port, :agent_host, :tag, :env, :queue, :cron
+          attr_reader :agent_port, :agent_host, :tags, :env, :queue, :cron
 
           def initialize!(options)
             @agent_port, @agent_host = options.fetch_values(:agent_port, :agent_host)
-            @tag = options[:tag] || ''
-            @env = options[:env] || ''
+            @tags = options[:tags] || []
             @queue = options[:queue] || ''
             @cron = options[:cron] || "*/1 * * * *"
 

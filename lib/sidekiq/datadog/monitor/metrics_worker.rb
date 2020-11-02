@@ -6,6 +6,8 @@ module Sidekiq
     module Monitor
       class MetricsWorker
         include Sidekiq::Worker
+
+        sidekiq_options retry: false
         
         def perform
           Sidekiq::Stats.new.queues.each_pair do |queue_name, size|
@@ -23,13 +25,13 @@ module Sidekiq
 
         def post_queue_size(queue_name, size)
           statsd.gauge('sidekiq.queue.size', size,
-                      tags: ["queue_name:#{queue_name}", "env:#{Data.env}", Data.tag])
+                      tags: ["queue_name:#{queue_name}"].concat(Data.tags))
         end
 
         def post_queue_latency(queue_name)
           latency = Sidekiq::Queue.new(queue_name).latency
           statsd.gauge('sidekiq.queue.latency', latency,
-                      tags: ["queue_name:#{queue_name}", "env:#{Data.env}", Data.tag])
+                      tags: ["queue_name:#{queue_name}"].concat(Data.tags))
         end
       end
     end
