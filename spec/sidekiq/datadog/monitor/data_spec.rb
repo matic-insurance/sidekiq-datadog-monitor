@@ -1,4 +1,3 @@
-require 'pry'
 RSpec.describe Sidekiq::Datadog::Monitor::Data do
   let(:scheduler_options) do
     {
@@ -38,24 +37,23 @@ RSpec.describe Sidekiq::Datadog::Monitor::Data do
     it { expect(described_class.agent_port).to eql(options[:agent_port]) }
     it { expect(described_class.tags).to eql(options[:tags]) }
   end
-  
 
   context 'when options are not provided' do
     context 'mandatory' do
-      let(:options) { {tags: ['tag:tag', 'env:production'], cron: '*/30 * * * *'} }
+      let(:options) { { tags: ['tag:tag', 'env:production'], cron: '*/30 * * * *' } }
 
       it 'raise error' do
-        expect{described_class.initialize!(options)}.to raise_error(Sidekiq::Datadog::Monitor::Error)
+        expect { described_class.initialize!(options) }.to raise_error(Sidekiq::Datadog::Monitor::Error)
       end
     end
 
     context 'optional' do
-      let(:options) { {agent_host: 'local', agent_port: 8125, queue: 'critical'} }
+      let(:options) { { agent_host: 'local', agent_port: 8125, queue: 'critical' } }
 
       before { described_class.initialize!(options) }
 
       it 'cron has default' do
-        expect(described_class.cron).to eql("*/1 * * * *")
+        expect(described_class.cron).to eql('*/1 * * * *')
       end
 
       it 'tags is empty string' do
