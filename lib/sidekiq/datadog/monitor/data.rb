@@ -1,3 +1,4 @@
+require 'pry'
 module Sidekiq
   module Datadog
     module Monitor
@@ -6,12 +7,12 @@ module Sidekiq
           attr_reader :agent_port, :agent_host, :tags, :env, :queue, :cron
 
           def initialize!(options)
-            @agent_port, @agent_host = options.fetch_values(:agent_port, :agent_host)
+            @agent_port, @agent_host, @queue = options.fetch_values(:agent_port, :agent_host, :queue)
             @tags = options[:tags] || []
-            @queue = options[:queue] || ''
             @cron = options[:cron] || "*/1 * * * *"
 
           Sidekiq.configure_server do |config|
+            binding.pry
             SidekiqScheduler::Scheduler.dynamic = true
 
             config.on(:startup) do

@@ -1,3 +1,4 @@
+require 'pry'
 RSpec.describe Sidekiq::Datadog::Monitor::Data do
   let(:scheduler_options) do
     {
@@ -12,8 +13,7 @@ RSpec.describe Sidekiq::Datadog::Monitor::Data do
     {
       agent_host: 'localhost',
       agent_port: 8125,
-      env: 'production',
-      tag: 'tag',
+      tags: ['tag:tag', 'env:production'],
       queue: 'queue name',
       cron: '*/30 * * * *'
     }
@@ -22,12 +22,12 @@ RSpec.describe Sidekiq::Datadog::Monitor::Data do
   let(:worker_options) do
     { 'class' => 'Sidekiq::Datadog::Monitor::MetricsWorker',
       'cron' => '*/30 * * * *',
-      'queue' => 'queue name' }
+      'queue' => 'critical' }
   end
 
   let(:instance) { SidekiqScheduler::Scheduler.new(scheduler_options) }
 
-  context 'when options are not provided' do
+  context 'when options are provided' do
     before do
       described_class.initialize!(options)
     end
@@ -36,16 +36,13 @@ RSpec.describe Sidekiq::Datadog::Monitor::Data do
     it { expect(described_class.queue).to eql(options[:queue]) }
     it { expect(described_class.agent_host).to eql(options[:agent_host]) }
     it { expect(described_class.agent_port).to eql(options[:agent_port]) }
-    it { expect(described_class.env).to eql(options[:env]) }
-    it { expect(described_class.tag).to eql(options[:tag]) }
+    it { expect(described_class.tags).to eql(options[:tags]) }
   end
   
 
   context 'when options are not provided' do
-    let(:options) { {} }
-
     context 'mandatory' do
-      let(:message) { 'agent_host and agent_port must be defined' }
+      let(:options) { {tags: ['tag:tag', 'env:production'], cron: '*/30 * * * *'} }
 
       it 'raise error' do
         expect{described_class.initialize!(options)}.to raise_error(Sidekiq::Datadog::Monitor::Error)
@@ -53,23 +50,16 @@ RSpec.describe Sidekiq::Datadog::Monitor::Data do
     end
 
     context 'optional' do
-      let(:options) { {agent_host: 'local', agent_port: 8125} }
+      let(:options) { {agent_host: 'local', agent_port: 8125, queue: 'critical'} }
 
       before { described_class.initialize!(options) }
+
       it 'cron has default' do
         expect(described_class.cron).to eql("*/1 * * * *")
       end
 
-      it 'queue is empty string' do
-        expect(described_class.queue).to eql("")
-      end
-
-      it 'tag is empty string' do
-        expect(described_class.tag).to eql("")
-      end
-
-      it 'env is empty string' do
-        expect(described_class.env).to eql("")
+      it 'tags is empty string' do
+        expect(described_class.tags).to eql([])
       end
     end
   end
