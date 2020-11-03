@@ -31,9 +31,8 @@ require 'sidekiq/datadog/monitor/data'
 Sidekiq::Datadog::Monitor::Data.initialize!(
     {agent_host: 'localhost', 
      agent_port: 8125,
-     env: 'production',    # optional
-     tag: 'tag',           # optional  
-     queue: 'queue name',  # optional
+     queue: 'queue name',
+     tags: ['env:production', 'product:product_name'], # optional
      cron: "*/30 * * * *" # default: "*/1 * * * *"
      } 
     )
@@ -41,7 +40,9 @@ Sidekiq::Datadog::Monitor::Data.initialize!(
 ```
 `agent_host` and `agent_port` instantiate DogStatsD client 
 
-`env`, `tag`, `queue` settings for background job that will gather and send Sidekiq metrics
+`queue` setting for background job that will gather and send Sidekiq metrics
+
+`tags` tags for datadog metrics
 
 `cron` - schedule settings for background job that will gather and send Sidekiq metrics
 
