@@ -30,6 +30,9 @@ Lint/StructNewOverride:
 Metrics/BlockLength:
   Enabled: false
 
+Metrics/MethodLength:
+  Max: 11
+
 RSpec/FilePath:
   Enabled: false
 

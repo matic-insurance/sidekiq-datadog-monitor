@@ -1,4 +1,3 @@
-require 'pry'
 module Sidekiq
   module Datadog
     module Monitor
@@ -9,27 +8,26 @@ module Sidekiq
           def initialize!(options)
             @agent_port, @agent_host, @queue = options.fetch_values(:agent_port, :agent_host, :queue)
             @tags = options[:tags] || []
-            @cron = options[:cron] || "*/1 * * * *"
+            @cron = options[:cron] || '*/1 * * * *'
 
-          Sidekiq.configure_server do |config|
-            SidekiqScheduler::Scheduler.dynamic = true
+            Sidekiq.configure_server do |config|
+              SidekiqScheduler::Scheduler.dynamic = true
 
-            config.on(:startup) do
-              start
+              config.on(:startup) do
+                start
+              end
             end
-          end
-
           rescue StandardError => e
-            raise Sidekiq::Datadog::Monitor::Error.new(e.message)
+            raise Sidekiq::Datadog::Monitor::Error, e.message
           end
 
           private
 
           def start
-            Sidekiq.set_schedule('send_metrics', 
-              { "cron"=> cron, 'class' => 'Sidekiq::Datadog::Monitor::MetricsWorker', 'queue' => queue })
+            Sidekiq.set_schedule('send_metrics',
+                                 { 'cron' => cron, 'class' => 'Sidekiq::Datadog::Monitor::MetricsWorker', 'queue' => queue })
           end
-        end 
+        end
       end
     end
   end
