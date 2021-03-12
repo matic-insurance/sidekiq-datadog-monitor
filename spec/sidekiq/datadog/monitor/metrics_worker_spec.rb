@@ -13,7 +13,8 @@ RSpec.describe Sidekiq::Datadog::Monitor::MetricsWorker do
       agent_port: 8125,
       tags: ['tag:tag', 'env:production'],
       queue: 'critical',
-      cron: '*/30 * * * *'
+      cron: '*/30 * * * *',
+      batch: batch
     }
   end
 
@@ -31,11 +32,33 @@ RSpec.describe Sidekiq::Datadog::Monitor::MetricsWorker do
     perform
   end
 
-  it 'posts queue size' do
-    expect(statsd).to have_received(:gauge).with('sidekiq.queue.size', 100, { tags: tags })
+  context 'when the batch mode is off' do
+    let(:batch) { false }
+
+    it 'posts queue size' do
+      expect(statsd).to have_received(:gauge).with('sidekiq.queue.size', 100, { tags: tags })
+    end
+
+    it 'posts queue latency' do
+      expect(statsd).to have_received(:gauge).with('sidekiq.queue.latency', 5000, { tags: tags })
+    end
   end
 
-  it 'posts queue latency' do
-    expect(statsd).to have_received(:gauge).with('sidekiq.queue.latency', 5000, { tags: tags })
+  context 'when the batch mode is on' do
+    let(:batch) { true }
+
+    let(:statsd) do
+      instance_double(Datadog::Statsd, gauge: true).tap do |s|
+        allow(s).to receive(:batch).and_yield(s)
+      end
+    end
+
+    it 'posts queue size' do
+      expect(statsd).to have_received(:gauge).with('sidekiq.queue.size', 100, { tags: tags })
+    end
+
+    it 'posts queue latency' do
+      expect(statsd).to have_received(:gauge).with('sidekiq.queue.latency', 5000, { tags: tags })
+    end
   end
 end
