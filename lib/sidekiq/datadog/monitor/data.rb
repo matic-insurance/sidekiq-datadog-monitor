@@ -3,12 +3,13 @@ module Sidekiq
     module Monitor
       class Data
         class << self
-          attr_reader :agent_port, :agent_host, :tags, :env, :queue, :cron
+          attr_reader :agent_port, :agent_host, :tags, :env, :queue, :cron, :batch
 
           def initialize!(options)
             @agent_port, @agent_host, @queue = options.fetch_values(:agent_port, :agent_host, :queue)
             @tags = options[:tags] || []
             @cron = options[:cron] || '*/1 * * * *'
+            @batch = options[:batch] || false
 
             Sidekiq.configure_server do |config|
               SidekiqScheduler::Scheduler.dynamic = true
