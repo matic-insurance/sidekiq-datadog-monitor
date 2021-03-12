@@ -10,25 +10,29 @@ module Sidekiq
         sidekiq_options retry: false
 
         def perform
-          Sidekiq::Stats.new.queues.each_pair do |queue_name, size|
-            post_queue_size(queue_name, size)
+          statsd = ::Datadog::Statsd.new(Data.agent_host, Data.agent_port)
 
-            post_queue_latency(queue_name)
-          end
+          return send_metrics(statsd) unless Data.batch
+
+          statsd.batch { |batch_statsd| send_metrics(batch_statsd) }
         end
 
         private
 
-        def statsd
-          @statsd = ::Datadog::Statsd.new(Data.agent_host, Data.agent_port)
+        def send_metrics(statsd)
+          Sidekiq::Stats.new.queues.each_pair do |queue_name, size|
+            post_queue_size(statsd, queue_name, size)
+
+            post_queue_latency(statsd, queue_name)
+          end
         end
 
-        def post_queue_size(queue_name, size)
+        def post_queue_size(statsd, queue_name, size)
           statsd.gauge('sidekiq.queue.size', size,
                        tags: ["queue_name:#{queue_name}"].concat(Data.tags))
         end
 
-        def post_queue_latency(queue_name)
+        def post_queue_latency(statsd, queue_name)
           latency = Sidekiq::Queue.new(queue_name).latency
           statsd.gauge('sidekiq.queue.latency', latency,
                        tags: ["queue_name:#{queue_name}"].concat(Data.tags))
