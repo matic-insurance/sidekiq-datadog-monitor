@@ -12,14 +12,15 @@ module Sidekiq
             @batch = options[:batch] || false
 
             Sidekiq.configure_server do |config|
-              SidekiqScheduler::Scheduler.dynamic = true
+              # Since Sidekiq::Scheduler = SidekiqScheduler::Scheduler
+              Scheduler.dynamic = true
 
               config.on(:startup) do
                 start
               end
             end
           rescue StandardError => e
-            raise Sidekiq::Datadog::Monitor::Error, e.message
+            raise Error, e
           end
 
           private
