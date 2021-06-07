@@ -28,6 +28,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.17"
+  spec.add_development_dependency "mutant", "~> 0.10.21"
+  spec.add_development_dependency "mutant-rspec", "~> 0.10.21"
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "rubocop", "~> 0.85.0"

@@ -1,6 +1,11 @@
 RSpec.describe Sidekiq::Datadog::Monitor::MetricsWorker do
   let(:perform) { described_class.new.perform }
-  let(:statsd) { instance_double(Datadog::Statsd, gauge: true) }
+  let(:statsd) do
+    instance_double(Datadog::Statsd, gauge: true).tap do |s|
+      allow(s).to receive(:batch).and_yield(s)
+    end
+  end
+
   let(:stats) { instance_double(Sidekiq::Stats) }
   let(:stats_queue) { instance_double(Sidekiq::Queue) }
 
@@ -25,7 +30,7 @@ RSpec.describe Sidekiq::Datadog::Monitor::MetricsWorker do
     allow(Sidekiq::Queue).to receive(:new).with('default').and_return(stats_queue)
     allow(stats_queue).to receive(:latency).and_return(5000)
 
-    allow(Datadog::Statsd).to receive(:new).and_return(statsd)
+    allow(Datadog::Statsd).to receive(:new).with('localhost', 8125).and_return(statsd)
     allow(stats).to receive(:queues).and_return(queues)
     allow(statsd).to receive(:gauge)
 
@@ -34,6 +39,10 @@ RSpec.describe Sidekiq::Datadog::Monitor::MetricsWorker do
 
   context 'when the batch mode is off' do
     let(:batch) { false }
+
+    it 'does not call batch' do
+      expect(statsd).not_to have_received(:batch)
+    end
 
     it 'posts queue size' do
       expect(statsd).to have_received(:gauge).with('sidekiq.queue.size', 100, { tags: tags })
@@ -47,10 +56,8 @@ RSpec.describe Sidekiq::Datadog::Monitor::MetricsWorker do
   context 'when the batch mode is on' do
     let(:batch) { true }
 
-    let(:statsd) do
-      instance_double(Datadog::Statsd, gauge: true).tap do |s|
-        allow(s).to receive(:batch).and_yield(s)
-      end
+    it 'calls batch' do
+      expect(statsd).to have_received(:batch)
     end
 
     it 'posts queue size' do

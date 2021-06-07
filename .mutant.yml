@@ -1,0 +1,7 @@
+# https://github.com/mbj/mutant/blob/master/docs/configuration.md
+integration: rspec
+includes:
+  - lib
+requires:
+  - sidekiq/datadog/monitor
+fail_fast: false
