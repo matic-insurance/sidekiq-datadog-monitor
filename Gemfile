@@ -7,6 +7,9 @@ gemspec
 
 group :test, :development do
   gem 'pry'
+  gem 'mutant', '~> 0.10.32'
+  gem 'mutant-rspec', '~> 0.10.32'
+  gem 'regexp_parser', '~> 2.0.3'
 end
 
 group :test do
