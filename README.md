@@ -8,7 +8,7 @@ and send it to datadog
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'sidekiq-datadog-monitor', '0.0.1'
+gem 'sidekiq-datadog-monitor'
 ```
 
 And then execute:
