@@ -5,7 +5,7 @@ orbs:
   gem-publisher: doximity/gem-publisher@0.1.3
 
 jobs:
-  publish:
+  build:
     docker:
       - image: 'cimg/base:stable'
     steps:
@@ -17,6 +17,6 @@ jobs:
           to_rubygems: true
 
 workflows:
-  publish-ruby-gem:
+  build:
     jobs:
       - publish
