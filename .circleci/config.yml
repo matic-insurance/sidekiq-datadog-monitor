@@ -6,7 +6,7 @@ orbs:
 
 jobs:
   
-  build:
+  publish:
     docker:
       - image: 'cimg/base:2021.04'
     steps:
@@ -19,7 +19,7 @@ jobs:
 
 workflows:
 
-  build.build-pull-request:
+  publish.build-pull-request:
     when:
       not:
         equal: [master, << pipeline.git.branch >>]
