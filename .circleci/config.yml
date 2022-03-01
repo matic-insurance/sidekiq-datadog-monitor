@@ -5,9 +5,10 @@ orbs:
   gem-publisher: doximity/gem-publisher@0.1.3
 
 jobs:
+  
   build:
     docker:
-      - image: 'cimg/base:stable'
+      - image: 'cimg/base:2021.04'
     steps:
       - checkout
       - ruby/install:
@@ -17,6 +18,10 @@ jobs:
           to_rubygems: true
 
 workflows:
-  build:
+
+  build.build-pull-request:
+    when:
+      not:
+        equal: [master, << pipeline.git.branch >>]
     jobs:
       - build
