@@ -9,19 +9,20 @@ jobs:
   publish:
     docker:
       - image: 'cimg/base:2021.04'
+    env:
+      rubygems_api_key: $RUBYGEMS_API_KEY
+      to_rubygems: true
+
     steps:
       - checkout
       - ruby/install:
           version: '2.6.2'
-      # - gem-publisher/publish:
-      #     rubygems_api_key: $RUBYGEMS_API_KEY  
-      #     to_rubygems: true
+      - gem-publisher/publish
 
 workflows:
 
-  publish.build-pull-request:
+  publish.master:
     when:
-      not:
-        equal: [master, << pipeline.git.branch >>]
+      equal: [master, << pipeline.git.branch >>]
     jobs:
       - publish
