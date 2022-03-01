@@ -1,38 +1,22 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
 orbs:
   ruby: circleci/ruby@1.4.0
-
-# jobs:
-#   say-hello:
-#     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-#     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
-#     docker:
-#       - image: cimg/base:stable
-#     # Add steps to the job
-#     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
-#     steps:
-#       - checkout
-#       - run:
-#           name: "Say hello"
-#           command: "echo Hello, World!"
-
-# Invoke jobs via workflows
-# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+  gem-publisher: doximity/gem-publisher@0.1.3
 
 jobs:
-  build:
+  publish:
     docker:
       - image: 'cimg/base:stable'
     steps:
       - checkout
       - ruby/install:
           version: '2.6.2'
-      - run: echo "Ruby 2.6.2 has been installed"
+      - gem-publisher/publish:
+          rubygems_api_key: $RUBYGEMS_API_KEY  
+          to_rubygems: true
 
 workflows:
-  say-hello:
+  publish-ruby-gem:
     jobs:
-      - build
+      - publish
