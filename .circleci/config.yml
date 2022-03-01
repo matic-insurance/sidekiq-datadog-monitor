@@ -23,6 +23,8 @@ workflows:
 
   publish.master:
     when:
-      equal: [master, << pipeline.git.branch >>]
+      not:
+        equal: [master, << pipeline.git.branch >>]
     jobs:
       - publish
+      
