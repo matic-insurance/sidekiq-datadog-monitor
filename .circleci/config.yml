@@ -24,4 +24,4 @@ workflows:
       not:
         equal: [master, << pipeline.git.branch >>]
     jobs:
-      - build
+      - publish
