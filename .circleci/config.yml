@@ -21,10 +21,11 @@ jobs:
 
 workflows:
 
-  publish.master:
+  publish:
     when:
       not:
         equal: [master, << pipeline.git.branch >>]
+
     jobs:
       - publish:
           context:
