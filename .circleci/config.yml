@@ -9,7 +9,7 @@ jobs:
   publish:
     docker:
       - image: 'cimg/base:2021.04'
-        env:
+        environment:
           rubygems_api_key: $RUBYGEMS_API_KEY
           to_rubygems: true
 
