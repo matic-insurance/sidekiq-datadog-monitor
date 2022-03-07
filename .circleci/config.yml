@@ -10,10 +10,9 @@ jobs:
       - image: cimg/ruby:2.7
     steps:
       - checkout
-      # - ruby/install-deps
       - run:
-          name: Install Deps
-          command: bundle install
+          command: ls -l
+      - ruby/install-deps
       - run:
           name: Publish gem to Rubygems
           command: bundle exec rake release
