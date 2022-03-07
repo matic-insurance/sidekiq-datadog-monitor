@@ -4,29 +4,22 @@ orbs:
   ruby: circleci/ruby@1.4.0
   gem-publisher: doximity/gem-publisher@0.1.3
 
-jobs:
-  
-  publish:
-    docker:
-      - image: 'cimg/base:2021.04'
-        environment:
-          rubygems_api_key: $RUBYGEMS_API_KEY
-          to_rubygems: true
-
-    steps:
-      - checkout
-      - ruby/install:
-          version: '2.6.2'
-      - gem-publisher/publish
+# jobs:
+#   gem-publisher/publish:
+#     docker:
+#       - image: 'cimg/ruby:2.6.2'
+#         environment:
+#           rubygems_api_key: $RUBYGEMS_API_KEY
+#           to_rubygems: true
+#     steps:
+#       - checkout
 
 workflows:
-
-  publish:
+  publishing.master:
     when:
       not:
         equal: [master, << pipeline.git.branch >>]
-
     jobs:
-      - publish:
-          context:
-            gem-publishing
+      - gem-publisher/publish:
+          to_rubygems: true
+          context: gem-publishing
