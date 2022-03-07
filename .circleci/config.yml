@@ -18,7 +18,7 @@ jobs:
 
   release:
     docker:
-      - image: cimg/ruby:2.5.8
+      - image: cimg/ruby:2.6.2
     steps:
       - checkout
       - ruby/install-deps
