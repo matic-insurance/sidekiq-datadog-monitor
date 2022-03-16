@@ -5,23 +5,11 @@ on:
     types: [ published ]
 
 jobs:
-  build:
+  trigger-circleci:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6.2
-          bundler: Gemfile.lock
-
-      - name: Release Gem
-        if: contains(github.ref, 'refs/tags/v')
-        uses: cadwallion/publish-rubygems-action@master
+      - name: sidekick-datadog-monitor
+        id: '${{ secrets.CIRCLECI_PROJECT_ID }}'
+        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.4
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          RUBYGEMS_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
-          RELEASE_COMMAND: rake release
+          CCI_TOKEN: '${{ secrets.CCI_TOKEN }}'
