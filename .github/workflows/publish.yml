@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: sidekick-datadog-monitor
-        id: '${{ secrets.CIRCLECI_PROJECT_ID }}'
+        id: ${{ secrets.CIRCLECI_PROJECT_ID }}
         uses: circleci/trigger_circleci_pipeline@v1.0
         env:
-          CCI_TOKEN: '${{ secrets.CCI_TOKEN }}'
+          CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
