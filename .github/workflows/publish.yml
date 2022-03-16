@@ -10,6 +10,6 @@ jobs:
     steps:
       - name: sidekick-datadog-monitor
         id: f72e63c8-1eae-44cc-a683-ec77b9c0d3e0
-        uses: circleci/trigger_circleci_pipeline@v1.0
+        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.4
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
