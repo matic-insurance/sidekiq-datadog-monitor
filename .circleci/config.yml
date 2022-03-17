@@ -23,6 +23,9 @@ jobs:
       event:
         type: string
         default: "aaa"
+      tag:
+        type: string
+        default: "bbb"
     docker:
       - image: cimg/ruby:2.6.2
     environment:
