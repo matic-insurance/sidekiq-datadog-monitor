@@ -13,7 +13,7 @@ parameters:
   GHA_Event:
     type: string
     default: ""
-  GHA_Meta:
+   GHA_Meta:
     type: string
     default: ""
 
