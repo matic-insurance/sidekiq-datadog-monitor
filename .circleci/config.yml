@@ -17,9 +17,6 @@ parameters:
     type: string
     default: ""
 
-environment:
-  EVENT_TAG: << pipeline.parameters.GHA_Event >>
-
 jobs:
   release:
     parameters:
@@ -28,8 +25,8 @@ jobs:
         default: "aaa"
     docker:
       - image: cimg/ruby:2.6.2
-    env:
-      test: << pipeline.parameters.GHA_Event >>
+    environment:
+      EVENT_TAG: << pipeline.parameters.GHA_Event >>
     steps:
       - checkout
       - ruby/install-deps
