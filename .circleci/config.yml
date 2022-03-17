@@ -17,6 +17,9 @@ parameters:
     type: string
     default: ""
 
+environment:
+  EVENT_TAG: << parameters.event >>
+
 jobs:
   release:
     parameters:
@@ -31,7 +34,7 @@ jobs:
       - run:
           name: Set up credentials
           command: |
-              echo << parameters.event >>
+              echo $EVENT_TAG
               mkdir -p $HOME/.gem
               touch $HOME/.gem/credentials
               chmod 0600 $HOME/.gem/credentials
