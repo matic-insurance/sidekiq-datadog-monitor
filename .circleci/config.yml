@@ -40,7 +40,8 @@ jobs:
 
 workflows:
   release:
-    when: << pipeline.parameters.GHA_Action >>
+    when:
+      equal: [ "release", << pipeline.parameters.GHA_Event >>]
     jobs:
       - release:
           context: gem-publishing
