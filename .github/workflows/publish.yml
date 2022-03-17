@@ -1,15 +1,15 @@
-name: publish gem
+# name: publish gem
 
-on:
-  release:
-    types: [ published ]
+# on:
+#   release:
+#     types: [ published ]
 
-jobs:
-  trigger-circleci:
-    runs-on: ubuntu-latest
-    steps:
-      - name: sidekiq-datadog-monitor
-        id: f72e63c8-1eae-44cc-a683-ec77b9c0d3e0
-        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.4
-        env:
-          CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
+# jobs:
+#   trigger-circleci:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: sidekiq-datadog-monitor
+#         id: f72e63c8-1eae-44cc-a683-ec77b9c0d3e0
+#         uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.4
+#         env:
+#           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
