@@ -54,8 +54,8 @@ jobs:
 
 workflows:
   release:
-    # when:
-    #   equal: [ "release", << pipeline.parameters.GHA_Event >>]
+    when:
+      equal: [ "release", << pipeline.parameters.GHA_Event >>]
     jobs:
       - release:
           event: << pipeline.parameters.GHA_Event >>
