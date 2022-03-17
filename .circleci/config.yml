@@ -61,3 +61,6 @@ workflows:
           event: << pipeline.parameters.GHA_Event >>
           tag: << pipeline.git.tag >>
           context: gem-publishing
+          filters:
+            tags:
+              only: /^v.*/
