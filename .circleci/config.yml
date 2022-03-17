@@ -1,53 +1,32 @@
 version: 2.1
 
-parameters:
-  GHA_Actor:
-    type: string
-    default: ""
-  GHA_Action:
-    type: string
-    default: ""
-  GHA_Event:
-    type: string
-    default: "no-event"
-  GHA_Meta:
-    type: string
-    default: ""
-
 orbs:
   ruby: circleci/ruby@1.4.0
 
 jobs:
   release-gem:
     parameters:
-      event:
-        type: string
-        default: "default-event"
       tag:
         type: string
         default: "default-tag"
     docker:
       - image: cimg/ruby:2.6.2
     environment:
-      EVENT: << parameters.event >>
       TAG: << parameters.tag >>
-      TS: << pipeline.trigger_source >>
     steps:
       - checkout
-#      - ruby/install-deps
+      - ruby/install-deps
       - run:
           name: Set up credentials
           command: |
-              echo "-${EVENT}-"
               echo "-${TAG}-"
-              echo "-${TS}-"
               mkdir -p $HOME/.gem
               touch $HOME/.gem/credentials
               chmod 0600 $HOME/.gem/credentials
               printf -- "---\n:rubygems_api_key: $RUBYGEMS_API_KEY\n" > $HOME/.gem/credentials
-      - run:
-          name: Build gem
-          command: gem build *.gemspec
+      # - run:
+      #     name: Build gem
+      #     command: gem build *.gemspec
       # - run:
       #     name: Push gem
       #     command: gem push *.gem
@@ -57,7 +36,6 @@ workflows:
   release:
     jobs:
       - release-gem:
-          event: << pipeline.parameters.GHA_Event >>
           tag: << pipeline.git.tag >>
           context: gem-publishing
           filters:
