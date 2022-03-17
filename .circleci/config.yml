@@ -19,6 +19,10 @@ parameters:
 
 jobs:
   release:
+    parameters:
+      event:
+        type: string
+        default: "aaa"
     docker:
       - image: cimg/ruby:2.6.2
     steps:
@@ -27,6 +31,7 @@ jobs:
       - run:
           name: Set up credentials
           command: |
+              echo << parameters.event >>
               mkdir -p $HOME/.gem
               touch $HOME/.gem/credentials
               chmod 0600 $HOME/.gem/credentials
@@ -44,4 +49,5 @@ workflows:
     #   equal: [ "release", << pipeline.parameters.GHA_Event >>]
     jobs:
       - release:
+          event: << pipeline.parameters.GHA_Event >>
           context: gem-publishing
