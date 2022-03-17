@@ -22,10 +22,10 @@ jobs:
     parameters:
       event:
         type: string
-        default: "aaa"
+        default: "default-event"
       tag:
         type: string
-        default: "bbb"
+        default: "default-tag"
     docker:
       - image: cimg/ruby:2.6.2
     environment:
