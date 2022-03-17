@@ -28,13 +28,15 @@ jobs:
         default: "aaa"
     docker:
       - image: cimg/ruby:2.6.2
+    env:
+      test: << pipeline.parameters.GHA_Event >>
     steps:
       - checkout
       - ruby/install-deps
       - run:
           name: Set up credentials
           command: |
-              echo $EVENT_TAG
+              echo "-${EVENT_TAG}-"
               mkdir -p $HOME/.gem
               touch $HOME/.gem/credentials
               chmod 0600 $HOME/.gem/credentials
