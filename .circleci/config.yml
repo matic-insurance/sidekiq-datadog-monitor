@@ -9,7 +9,7 @@ parameters:
     default: ""
   GHA_Event:
     type: string
-    default: ""
+    default: "no-event"
   GHA_Meta:
     type: string
     default: ""
@@ -34,7 +34,7 @@ jobs:
       TS: << pipeline.trigger_source >>
     steps:
       - checkout
-      - ruby/install-deps
+#      - ruby/install-deps
       - run:
           name: Set up credentials
           command: |
