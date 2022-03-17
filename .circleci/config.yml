@@ -18,7 +18,7 @@ parameters:
     default: ""
 
 environment:
-  EVENT_TAG: << parameters.event >>
+  EVENT_TAG: << pipeline.parameters.GHA_Event >>
 
 jobs:
   release:
