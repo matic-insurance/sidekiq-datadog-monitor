@@ -3,20 +3,6 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@1.4.0
 
-parameters:
-  GHA_Actor:
-    type: string
-    default: ""
-  GHA_Action:
-    type: string
-    default: ""
-  GHA_Event:
-    type: string
-    default: ""
-  GHA_Meta:
-    type: string
-    default: ""
-
 jobs:
   release:
     parameters:
