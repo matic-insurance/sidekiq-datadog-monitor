@@ -18,7 +18,7 @@ orbs:
   ruby: circleci/ruby@1.4.0
 
 jobs:
-  release:
+  release-gem:
     parameters:
       event:
         type: string
@@ -53,9 +53,10 @@ jobs:
       #     command: gem push *.gem
 
 workflows:
+  version: 2
   release:
     jobs:
-      - release:
+      - release-gem:
           event: << pipeline.parameters.GHA_Event >>
           tag: << pipeline.git.tag >>
           context: gem-publishing
