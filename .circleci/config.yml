@@ -26,19 +26,13 @@ jobs:
               printf -- "---\n:rubygems_api_key: $RUBYGEMS_API_KEY\n" > $HOME/.gem/credentials
       - run:
           name: cat
-          command: cat ./version.rb
-      - run: 
-          name: Get version
-          command: echo "${TAG}" > release.tag
+          command: cat version.rb
       - run: 
           name: Set version
           command: sed -i "s/0.0.0/$(<release.tag)/g" $(find . -name "version.rb")      
       - run:
           name: Build gem
           command: gem build *.gemspec
-      - run:
-          name: cat
-          command: cat ./version.rb
       # - run:
       #     name: Push gem
       #     command: gem push *.gem
