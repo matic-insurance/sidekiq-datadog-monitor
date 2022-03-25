@@ -24,12 +24,12 @@ jobs:
               touch $HOME/.gem/credentials
               chmod 0600 $HOME/.gem/credentials
               printf -- "---\n:rubygems_api_key: $RUBYGEMS_API_KEY\n" > $HOME/.gem/credentials
-      # - run:
-      #     name: Build gem
-      #     command: gem build *.gemspec
-      # - run:
-      #     name: Push gem
-      #     command: gem push *.gem
+      - run:
+          name: Build gem
+          command: gem build *.gemspec
+      - run:
+          name: Push gem
+          command: gem push *.gem
 
 workflows:
   version: 2
