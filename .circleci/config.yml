@@ -33,13 +33,16 @@ jobs:
 
 workflows:
   version: 2
+  when:
+    tags: 
+      only: /^v.*/
   release:
     jobs:
       - release-gem:
           tag: << pipeline.git.tag >>
           context: gem-publishing
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: /^v.*/
-            # branches:
-            #   ignore: master
