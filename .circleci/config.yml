@@ -33,9 +33,7 @@ jobs:
 
 workflows:
   version: 2
-  when:
-    tags: 
-      only: /^v.*/
+
   release:
     jobs:
       - release-gem:
