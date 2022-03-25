@@ -43,4 +43,4 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /\d+/
+              only: /\d.\d.\d/
