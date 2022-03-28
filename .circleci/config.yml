@@ -29,7 +29,12 @@ jobs:
           command: echo "${TAG}" > release.tag
       - run: 
           name: Set version
-          command: sed -i "s/0.0.0/$(<release.tag)/g" $(find . -name "version.rb")      
+          command: sed -i "s/0.0.0/$(<release.tag)/g" $(find . -name "version.rb")  
+      - run: 
+          name: caat
+          command: |
+            ls -l
+            cat ./lib/sidekiq/datadog/monitor/version.rb     
       - run:
           name: Build gem
           command: gem build *.gemspec
