@@ -26,7 +26,7 @@ jobs:
               printf -- "---\n:rubygems_api_key: $RUBYGEMS_API_KEY\n" > $HOME/.gem/credentials
       - run: 
           name: Set version
-          command: sed -i "s/0.0.0/${TAG}/g" $(find . -name "version.rb")      
+          command: sed -i "${TAG}" $(find . -name "version.rb")      
       - run:
           name: Build gem
           command: gem build *.gemspec
