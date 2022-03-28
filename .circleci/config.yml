@@ -13,6 +13,7 @@ jobs:
       - run:
           name: Run tests
           command: |
+            apt update && apt install -y tzdata
             bundle exec rspec
 
   release-gem:
