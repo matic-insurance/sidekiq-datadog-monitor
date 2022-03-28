@@ -30,15 +30,6 @@ jobs:
       - run: 
           name: Set version
           command: sed -i "s/0.0.0/$(<release.tag)/g" $(find . -name "version.rb")      
-      - гun:
-          name: Cat
-          command: cat ./lib/sidekiq/datadog/monitor/version.rb
-      - run: 
-          name: Set version2
-          command: sed -i "s/0.0.0/${TAG}/g" $(find . -name "version.rb") 
-      - гun:
-          name: Cat2
-          command: cat ./lib/sidekiq/datadog/monitor/version.rb
       - run:
           name: Build gem
           command: gem build *.gemspec
