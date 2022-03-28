@@ -12,7 +12,7 @@ jobs:
     docker:
       - image: cimg/ruby:2.6.2
     environment:
-      TAG: << parameters.tag >>
+      RELEASE_TAG: << parameters.tag >>
     steps:
       - checkout
       - ruby/install-deps
@@ -25,12 +25,7 @@ jobs:
               printf -- "---\n:rubygems_api_key: $RUBYGEMS_API_KEY\n" > $HOME/.gem/credentials
       - run: 
           name: Set version
-          command: sed -i "s/[[:digit:]].[[:digit:]].[[:digit:]]/${TAG}/g" $(find . -name "version.rb")  
-      - run: 
-          name: caat
-          command: |
-            ls -l
-            cat ./lib/sidekiq/datadog/monitor/version.rb     
+          command: sed -i "s/[[:digit:]].[[:digit:]].[[:digit:]]/${RELEASE_TAG}/g" $(find . -name "version.rb")   
       - run:
           name: Build gem
           command: gem build *.gemspec
