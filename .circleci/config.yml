@@ -12,34 +12,38 @@ jobs:
     docker:
       - image: cimg/ruby:2.6.2
     environment:
-      TAG: << parameters.tag >>
+      RELEASE_TAG: << parameters.tag >>
     steps:
       - checkout
       - ruby/install-deps
       - run:
           name: Set up credentials
           command: |
-              echo "-${TAG}-"
               mkdir -p $HOME/.gem
               touch $HOME/.gem/credentials
               chmod 0600 $HOME/.gem/credentials
               printf -- "---\n:rubygems_api_key: $RUBYGEMS_API_KEY\n" > $HOME/.gem/credentials
-      # - run:
-      #     name: Build gem
-      #     command: gem build *.gemspec
-      # - run:
-      #     name: Push gem
-      #     command: gem push *.gem
+      - run: 
+          name: Set version
+          command: sed -i "s/[[:digit:]].[[:digit:]].[[:digit:]]/${RELEASE_TAG}/g" $(find . -name "version.rb")   
+      - run:
+          name: Build gem
+          command: gem build *.gemspec
+      - run:
+          name: Push gem
+          command: gem push *.gem
 
 workflows:
   version: 2
+
   release:
     jobs:
       - release-gem:
           tag: << pipeline.git.tag >>
           context: gem-publishing
           filters:
-            tags:
-              only: /^v.*/
             branches:
-              ignore: master
+              ignore: /.*/
+            tags: 
+              only: /\d\.\d\.\d/
+              
