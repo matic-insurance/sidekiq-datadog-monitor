@@ -49,7 +49,7 @@ workflows:
 
   test:
     when:
-      equal: [ master, << pipeline.git.branch >> ]
+      equal: [ << pipeline.git.branch >> ]
     jobs:
       - rspec:
           name: rspec
