@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     sidekiq-datadog-monitor (0.2.1)
-      dogstatsd-ruby (>= 4.8.1, < 5)
+      dogstatsd-ruby (~> 5.0)
       sidekiq (>= 2.2.1)
       sidekiq-scheduler (~> 3.0)
 
@@ -14,7 +14,7 @@ GEM
     concurrent-ruby (1.1.10)
     connection_pool (2.2.5)
     diff-lcs (1.4.4)
-    dogstatsd-ruby (4.8.3)
+    dogstatsd-ruby (5.5.0)
     e2mmap (0.1.0)
     et-orbi (1.2.7)
       tzinfo
@@ -66,11 +66,11 @@ GEM
     ruby-progressbar (1.10.1)
     rufus-scheduler (3.8.1)
       fugit (~> 1.1, >= 1.1.6)
-    sidekiq (6.4.2)
+    sidekiq (6.5.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
-    sidekiq-scheduler (3.2.1)
+    sidekiq-scheduler (3.2.2)
       e2mmap
       redis (>= 3, < 5)
       rufus-scheduler (~> 3.2)
