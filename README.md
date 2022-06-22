@@ -33,8 +33,7 @@ Sidekiq::Datadog::Monitor::Data.initialize!(
   agent_port: 8125,
   queue: 'queue name',
   tags: ['env:production', 'product:product_name'], # optional
-  cron: "*/30 * * * *" # default: "*/1 * * * *",
-  batch: false # optional, default: false
+  cron: "*/30 * * * *" # default: "*/1 * * * *"
 )
 ```
 `agent_host` and `agent_port` instantiate DogStatsD client
@@ -44,8 +43,6 @@ Sidekiq::Datadog::Monitor::Data.initialize!(
 `tags` tags for datadog metrics
 
 `cron` - schedule settings for background job that will gather and send Sidekiq metrics
-
-`batch` turns on sending DD metrics in batches. Make sure you don't have too many queues before enabling this option. The message with all tags must fit into [8KB of default DataDog buffer](https://docs.datadoghq.com/developers/dogstatsd/high_throughput/#enable-buffering-on-your-client) size.
 
 
 ## Development
