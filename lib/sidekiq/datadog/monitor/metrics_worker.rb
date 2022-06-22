@@ -11,10 +11,8 @@ module Sidekiq
 
         def perform
           statsd = ::Datadog::Statsd.new(Data.agent_host, Data.agent_port)
-
-          return send_metrics(statsd) unless Data.batch
-
-          statsd.batch { |batch_statsd| send_metrics(batch_statsd) }
+          send_metrics(statsd)
+          statsd.close
         end
 
         private

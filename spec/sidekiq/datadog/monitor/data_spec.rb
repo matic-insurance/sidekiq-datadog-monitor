@@ -14,8 +14,7 @@ RSpec.describe Sidekiq::Datadog::Monitor::Data do
       agent_port: 8125,
       tags: ['tag:tag', 'env:production'],
       queue: 'queue name',
-      cron: '*/30 * * * *',
-      batch: true
+      cron: '*/30 * * * *'
     }
   end
 
@@ -37,7 +36,6 @@ RSpec.describe Sidekiq::Datadog::Monitor::Data do
     it { expect(described_class.agent_host).to eql(options[:agent_host]) }
     it { expect(described_class.agent_port).to eql(options[:agent_port]) }
     it { expect(described_class.tags).to eql(options[:tags]) }
-    it { expect(described_class.batch).to be true }
   end
 
   context 'when options are not provided' do
@@ -60,10 +58,6 @@ RSpec.describe Sidekiq::Datadog::Monitor::Data do
 
       it 'tags is empty string' do
         expect(described_class.tags).to eql([])
-      end
-
-      it 'batch is false' do
-        expect(described_class.batch).to be false
       end
     end
   end
