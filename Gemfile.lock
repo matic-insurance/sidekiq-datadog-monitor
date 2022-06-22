@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     sidekiq-datadog-monitor (0.2.1)
-      dogstatsd-ruby (>= 4.8.1)
+      dogstatsd-ruby (>= 4.8.1, < 5)
       sidekiq (>= 2.2.1)
       sidekiq-scheduler (~> 3.0)
 
@@ -14,7 +14,7 @@ GEM
     concurrent-ruby (1.1.10)
     connection_pool (2.2.5)
     diff-lcs (1.4.4)
-    dogstatsd-ruby (5.5.0)
+    dogstatsd-ruby (4.8.3)
     e2mmap (0.1.0)
     et-orbi (1.2.7)
       tzinfo
