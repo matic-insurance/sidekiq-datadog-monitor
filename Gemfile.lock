@@ -4,7 +4,7 @@ PATH
     sidekiq-datadog-monitor (0.2.1)
       dogstatsd-ruby (~> 5.0)
       sidekiq (>= 2.2.1)
-      sidekiq-scheduler (~> 3.0)
+      sidekiq-scheduler (>= 3.0)
 
 GEM
   remote: https://rubygems.org/
@@ -15,7 +15,6 @@ GEM
     connection_pool (2.2.5)
     diff-lcs (1.4.4)
     dogstatsd-ruby (5.5.0)
-    e2mmap (0.1.0)
     et-orbi (1.2.7)
       tzinfo
     fugit (1.5.3)
@@ -29,10 +28,10 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     raabro (1.4.0)
-    rack (2.2.3.1)
+    rack (2.2.4)
     rainbow (3.0.0)
     rake (13.0.1)
-    redis (4.6.0)
+    redis (4.7.1)
     regexp_parser (1.8.2)
     rexml (3.2.5)
     rspec (3.9.0)
@@ -70,15 +69,11 @@ GEM
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
-    sidekiq-scheduler (3.2.2)
-      e2mmap
-      redis (>= 3, < 5)
+    sidekiq-scheduler (4.0.2)
+      redis (>= 4.2.0)
       rufus-scheduler (~> 3.2)
-      sidekiq (>= 3)
-      thwait
+      sidekiq (>= 4)
       tilt (>= 1.4.0)
-    thwait (0.2.0)
-      e2mmap
     tilt (2.0.10)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
