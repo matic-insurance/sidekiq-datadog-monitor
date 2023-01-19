@@ -5,7 +5,9 @@ RSpec.describe Sidekiq::Datadog::Monitor::MetricsWorker do
   let(:stats_queue) { instance_double(Sidekiq::Queue) }
 
   let(:queues) { { 'default' => 100 } }
+  let(:scheduled_size) { 500 }
   let(:tags) { ['queue_name:default', 'tag:tag', 'env:production'] }
+  let(:schedule_tags) { ['scheduled_size', 'tag:tag', 'env:production'] }
 
   let(:options) do
     {
@@ -26,6 +28,7 @@ RSpec.describe Sidekiq::Datadog::Monitor::MetricsWorker do
 
     allow(Datadog::Statsd).to receive(:new).and_return(statsd)
     allow(stats).to receive(:queues).and_return(queues)
+    allow(stats).to receive(:scheduled_size).and_return(scheduled_size)
     allow(statsd).to receive(:gauge)
 
     perform
@@ -37,5 +40,9 @@ RSpec.describe Sidekiq::Datadog::Monitor::MetricsWorker do
 
   it 'posts queue latency' do
     expect(statsd).to have_received(:gauge).with('sidekiq.queue.latency', 5000, { tags: tags })
+  end
+
+  it 'posts scheduled size' do
+    expect(statsd).to have_received(:gauge).with('sidekiq.scheduled', 500, { tags: schedule_tags })
   end
 end
