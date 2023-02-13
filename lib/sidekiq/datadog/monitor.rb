@@ -30,8 +30,6 @@ module Sidekiq
         end
 
         def send_metrics
-          raise Sidekiq::Datadog::Monitor::Error, "Can't send metrics, gem not initialized" unless sender
-
           sender.call
         end
 

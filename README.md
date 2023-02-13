@@ -27,8 +27,8 @@ To start sending metrics
 # Import the library
 require 'sidekiq/datadog/monitor'
 
-# Initiate a Sidekiq::Datadog::Monitor client instance.
-Sidekiq::Datadog::Monitor.initialize!(
+# Configure Sidekiq::Datadog::Monitor.
+Sidekiq::Datadog::Monitor.configure!(
   agent_host: 'localhost',
   agent_port: 8125,
   tags: ['env:production', 'product:product_name'], # optional

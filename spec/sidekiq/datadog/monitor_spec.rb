@@ -67,23 +67,15 @@ RSpec.describe Sidekiq::Datadog::Monitor do
   end
 
   describe '.send_metrics!' do
-    context 'when not configured' do
-      it 'raising error' do
-        expect { described_class.send_metrics }.to raise_error(described_class::Error)
-      end
+    before do
+      described_class.configure!({ agent_host: 'host', agent_port: 'port', tags: ['test: true'] })
+      described_class.initialize!
     end
 
-    context 'when configured' do
-      before do
-        described_class.configure!({ agent_host: 'host', agent_port: 'port', tags: ['test: true'] })
-        described_class.initialize!
-      end
-
-      it 'sends metrics' do
-        allow(described_class.sender).to receive(:call)
-        described_class.send_metrics
-        expect(described_class.sender).to have_received(:call)
-      end
+    it 'sends metrics' do
+      allow(described_class.sender).to receive(:call)
+      described_class.send_metrics
+      expect(described_class.sender).to have_received(:call)
     end
   end
 
