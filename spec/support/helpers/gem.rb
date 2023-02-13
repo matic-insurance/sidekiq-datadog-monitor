@@ -30,7 +30,7 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    described_class.send(:reset!)
+    Sidekiq::Datadog::Monitor.send(:reset!)
     sidekiq_config.reset!
   end
 end

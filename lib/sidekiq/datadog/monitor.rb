@@ -1,7 +1,4 @@
-require 'sidekiq/api'
-require 'sidekiq-scheduler'
-require 'sidekiq/datadog/monitor/data'
-require 'sidekiq/datadog/monitor/metrics_worker'
+require 'datadog/statsd'
 require 'sidekiq/datadog/monitor/metrics_sender'
 
 module Sidekiq
@@ -29,7 +26,7 @@ module Sidekiq
 
         def initialize!
           @statsd = ::Datadog::Statsd.new(agent_host, agent_port)
-          @sender = Sidekiq::Datadog::Monitor::MetricsSender.new
+          @sender = Sidekiq::Datadog::Monitor::MetricsSender.new(statsd, tags)
         end
 
         def send_metrics

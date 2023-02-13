@@ -1,5 +1,5 @@
 RSpec.describe Sidekiq::Datadog::Monitor::MetricsSender do
-  let(:perform) { described_class.new.call }
+  let(:sender) { described_class.new(statsd, tags) }
   let(:statsd) { instance_double(Datadog::Statsd, gauge: true, close: true) }
   let(:stats) { instance_double(Sidekiq::Stats) }
   let(:stats_queue) { instance_double(Sidekiq::Queue, latency: 5000) }
@@ -18,16 +18,13 @@ RSpec.describe Sidekiq::Datadog::Monitor::MetricsSender do
   end
 
   before do
-    Sidekiq::Datadog::Monitor::Data.initialize!(options)
-
     allow(Sidekiq::Stats).to receive(:new).and_return(stats)
     allow(Sidekiq::Queue).to receive(:new).and_return(stats_queue)
 
-    allow(Datadog::Statsd).to receive(:new).and_return(statsd)
     allow(stats).to receive(:queues).and_return(queues)
     allow(statsd).to receive(:gauge)
 
-    perform
+    sender.send_metrics
   end
 
   it 'posts queue size' do
@@ -38,9 +35,5 @@ RSpec.describe Sidekiq::Datadog::Monitor::MetricsSender do
   it 'posts queue latency' do
     expect(statsd).to have_received(:gauge).with('sidekiq.queue.latency', 5000, { tags: ['queue_name:default'] + tags })
     expect(statsd).to have_received(:gauge).with('sidekiq.queue.latency', 5000, { tags: ['queue_name:low'] + tags })
-  end
-
-  it 'closing statsd instance' do
-    expect(statsd).to have_received(:close)
   end
 end
