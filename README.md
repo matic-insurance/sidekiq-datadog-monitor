@@ -25,24 +25,23 @@ To start sending metrics
 
 ```ruby
 # Import the library
-require 'sidekiq/datadog/monitor/data'
+require 'sidekiq/datadog/monitor'
 
-# Initiate a Sidekiq::Datadog::Monitor client instance.
-Sidekiq::Datadog::Monitor::Data.initialize!(
+# Configure Sidekiq::Datadog::Monitor.
+Sidekiq::Datadog::Monitor.configure!(
   agent_host: 'localhost',
   agent_port: 8125,
-  queue: 'queue name',
   tags: ['env:production', 'product:product_name'], # optional
-  cron: "*/30 * * * *" # default: "*/1 * * * *"
 )
 ```
-`agent_host` and `agent_port` instantiate DogStatsD client
+ - `agent_host` and `agent_port` instantiate DogStatsD client
+ - `tags` additional tags to be added for every metrics
 
-`queue` setting for background job that will gather and send Sidekiq metrics
+## How it works
 
-`tags` tags for datadog metrics
-
-`cron` - schedule settings for background job that will gather and send Sidekiq metrics
+Gem using sidekiq lifecycle events to operate and send metrics to datadog. 
+Heartbeat event is used to send metrics every 5 seconds. Heartbeat event happens in every sidekiq process so metrics 
+will be sent multiple times but will be aggregated on datadog.
 
 
 ## Development
