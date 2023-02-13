@@ -13,7 +13,6 @@ module Sidekiq
         def send_metrics
           Sidekiq::Stats.new.queues.each_pair do |queue_name, size|
             post_queue_size(statsd, queue_name, size)
-
             post_queue_latency(statsd, queue_name)
           end
         end
@@ -30,7 +29,6 @@ module Sidekiq
           statsd.gauge('sidekiq.queue.latency', latency,
                        tags: ["queue_name:#{queue_name}"].concat(common_tags))
         end
-
       end
     end
   end
