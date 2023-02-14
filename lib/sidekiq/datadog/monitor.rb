@@ -1,5 +1,6 @@
 require 'datadog/statsd'
 require 'sidekiq/datadog/monitor/metrics_sender'
+require 'sidekiq/datadog/monitor/tag_builder'
 
 module Sidekiq
   module Datadog
@@ -7,13 +8,13 @@ module Sidekiq
       class Error < StandardError; end
 
       class << self
-        attr_accessor :agent_port, :agent_host, :tags, :statsd, :sender
+        attr_accessor :agent_port, :agent_host, :tags_builder, :statsd, :sender
 
         def configure!(options)
           raise Sidekiq::Datadog::Monitor::Error, "Can't configure two times" if configured?
 
           @agent_host, @agent_port = options.fetch_values(:agent_host, :agent_port)
-          @tags = options[:tags] || []
+          @tags_builder = Sidekiq::Datadog::Monitor::TagBuilder.new(options[:tags] || [])
 
           add_sidekiq_listeners
         rescue KeyError => e
@@ -26,7 +27,7 @@ module Sidekiq
 
         def initialize!
           @statsd = ::Datadog::Statsd.new(agent_host, agent_port)
-          @sender = Sidekiq::Datadog::Monitor::MetricsSender.new(statsd, tags)
+          @sender = Sidekiq::Datadog::Monitor::MetricsSender.new(statsd, tags_builder)
         end
 
         def send_metrics
