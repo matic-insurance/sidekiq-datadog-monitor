@@ -15,6 +15,9 @@ module Sidekiq
             post_queue_size(statsd, queue_name, size)
             post_queue_latency(statsd, queue_name)
           end
+          Sidekiq::ProcessSet.new.each do |process|
+            post_process_stats(process)
+          end
         end
 
         protected
@@ -28,6 +31,14 @@ module Sidekiq
           latency = Sidekiq::Queue.new(queue_name).latency
           statsd.gauge('sidekiq.queue.latency', latency,
                        tags: ["queue_name:#{queue_name}"].concat(common_tags))
+        end
+
+        def post_process_stats(process)
+          utilization = process['busy'] / process['concurrency'].to_f
+          tags = ["process_id:#{process['identity']}"]
+          tags << "process_tag:#{process['tag']}" unless process['tag'].to_s == ''
+
+          statsd.gauge('sidekiq.process.utilization', utilization, tags: tags.concat(common_tags))
         end
       end
     end
