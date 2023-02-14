@@ -28,7 +28,7 @@ RSpec.describe Sidekiq::Datadog::Monitor do
       end
 
       it 'saves tags' do
-        expect(described_class.tags).to eq(['test: true'])
+        expect(described_class.tags_builder.build({})).to eq(['test: true'])
       end
     end
 
