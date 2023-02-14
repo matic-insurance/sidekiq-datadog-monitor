@@ -8,7 +8,8 @@ module Sidekiq
         end
 
         def build(tags_hash)
-          custom_tags = tags_hash.filter_map { |key, value| "#{key}:#{normalize_value(value)}" if value.to_s != '' }
+          custom_tags = tags_hash.map { |key, value| [key, value] if value.to_s != '' }.compact
+          custom_tags = custom_tags.map { |key, value| "#{key}:#{normalize_value(value)}" }
           custom_tags + @common_tags
         end
 
