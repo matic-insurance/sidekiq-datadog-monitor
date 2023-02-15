@@ -31,7 +31,7 @@ module Sidekiq
         end
 
         def send_metrics
-          sender.call
+          sender.send_metrics
         end
 
         def shutdown!
