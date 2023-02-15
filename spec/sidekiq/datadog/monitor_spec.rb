@@ -73,9 +73,9 @@ RSpec.describe Sidekiq::Datadog::Monitor do
     end
 
     it 'sends metrics' do
-      allow(described_class.sender).to receive(:call)
+      allow(described_class.sender).to receive(:send_metrics)
       described_class.send_metrics
-      expect(described_class.sender).to have_received(:call)
+      expect(described_class.sender).to have_received(:send_metrics)
     end
   end
 
