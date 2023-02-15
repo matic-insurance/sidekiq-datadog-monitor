@@ -32,6 +32,23 @@ RSpec.describe Sidekiq::Datadog::Monitor do
       end
     end
 
+    context 'with new sidekiq' do
+      before do
+        sidekiq_config.options[:lifecycle_events][:beat] = []
+        described_class.configure!({ agent_host: 'host', agent_port: 'port', tags: ['test: true'] })
+      end
+
+      it 'adds beat listener' do
+        allow(described_class).to receive(:send_metrics)
+        sidekiq_config.listeners[:beat].call
+        expect(described_class).to have_received(:send_metrics)
+      end
+
+      it 'not adds heartbeat' do
+        expect(sidekiq_config.listeners[:heartbeat]).to be_nil
+      end
+    end
+
     context 'when configuration is invalid' do
       it 'raises error' do
         expect { described_class.configure!({ agent_host: 'host' }) }.to raise_error(described_class::Error)

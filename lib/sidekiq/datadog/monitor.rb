@@ -38,7 +38,6 @@ module Sidekiq
           statsd.close
         end
 
-
         private
 
         def reset!
@@ -50,10 +49,11 @@ module Sidekiq
 
         def add_sidekiq_listeners
           Sidekiq.configure_server do |config|
+            metrics_event = config.options[:lifecycle_events][:beat] ? :beat : :heartbeat
             config.on(:startup) do
               Sidekiq::Datadog::Monitor.initialize!
             end
-            config.on(:heartbeat) do
+            config.on(metrics_event) do
               Sidekiq::Datadog::Monitor.send_metrics
             end
             config.on(:shutdown) do
