@@ -6,7 +6,7 @@ module Helpers
   end
 
   class SidekiqConfigDouble
-    attr_reader :listeners
+    attr_reader :listeners, :options
 
     def initialize
       reset!
@@ -18,6 +18,7 @@ module Helpers
 
     def reset!
       @listeners = {}
+      @options = { lifecycle_events: {} }
     end
   end
 end
