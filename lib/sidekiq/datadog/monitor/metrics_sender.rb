@@ -17,6 +17,7 @@ module Sidekiq
           Sidekiq::ProcessSet.new.each do |process|
             post_process_stats(process)
           end
+          post_scheduled_stats
         end
 
         protected
@@ -34,6 +35,11 @@ module Sidekiq
           tags = tags_builder.build(process_id: process['identity'], process_tag: process['tag'])
 
           statsd.gauge('sidekiq.process.utilization', utilization, tags: tags)
+        end
+
+        def post_scheduled_stats
+          scheduled_size = Sidekiq::Stats.new.scheduled_size
+          statsd.gauge('sidekiq.scheduled.size', scheduled_size, tags: tags_builder.build({}))
         end
       end
     end
