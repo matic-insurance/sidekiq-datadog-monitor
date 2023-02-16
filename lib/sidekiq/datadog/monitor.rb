@@ -51,7 +51,7 @@ module Sidekiq
 
         def add_sidekiq_listeners
           Sidekiq.configure_server do |config|
-            patch_sidekiq_heartbeat
+            patch_sidekiq_heartbeat(config)
 
             config.on(:startup) do
               Sidekiq::Datadog::Monitor.initialize!
@@ -65,10 +65,10 @@ module Sidekiq
           end
         end
 
-        def patch_sidekiq_heartbeat
-          return unless Sidekiq::Datadog::Monitor::HeartbeatPatch.needs_patching?
+        def patch_sidekiq_heartbeat(sidekiq_config)
+          return unless Sidekiq::Datadog::Monitor::HeartbeatPatch.needs_patching?(sidekiq_config)
 
-          Sidekiq::Datadog::Monitor::HeartbeatPatch.apply_heartbeat_patch
+          Sidekiq::Datadog::Monitor::HeartbeatPatch.apply_heartbeat_patch(sidekiq_config)
         end
       end
     end
