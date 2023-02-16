@@ -16,16 +16,17 @@ module Sidekiq
         end
 
         class << self
-          def apply_heartbeat_patch
+          def apply_heartbeat_patch(sidekiq_config)
             require 'sidekiq/launcher'
 
+            sidekiq_config.options[:lifecycle_events][:beat] ||= []
             Sidekiq::Launcher.prepend(Sidekiq::Datadog::Monitor::HeartbeatPatch)
-            Sidekiq[:lifecycle_events][:beat] ||= []
           end
 
-          def needs_patching?
-            return false unless Sidekiq[:lifecycle_events] # No events exist, Sidekiq is too old
-            return false if Sidekiq[:lifecycle_events][:beat] # beat event exist - no need to patch
+          def needs_patching?(sidekiq_config)
+            return false unless sidekiq_config.respond_to?(:options) # Unsupported config version
+            return false unless sidekiq_config.options[:lifecycle_events] # No events exist, Sidekiq is too old
+            return false if sidekiq_config.options[:lifecycle_events][:beat] # beat event exist - no need to patch
 
             true
           end
