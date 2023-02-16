@@ -30,7 +30,7 @@ module Sidekiq
         end
 
         def post_process_stats(process)
-          utilization = process['busy'] / process['concurrency'].to_f
+          utilization = (process['busy'] / process['concurrency'].to_f * 100).round(2)
           tags = tags_builder.build(process_id: process['identity'], process_tag: process['tag'])
 
           statsd.gauge('sidekiq.process.utilization', utilization, tags: tags)
