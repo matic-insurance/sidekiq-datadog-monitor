@@ -34,6 +34,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop-performance"
   spec.add_development_dependency "rubocop-rspec", "~> 1.38.1"
 
-  spec.add_dependency 'sidekiq', '>= 2.2.1'
+  spec.add_dependency 'sidekiq', '>= 5'
   spec.add_dependency 'dogstatsd-ruby', '~> 5.0'
 end

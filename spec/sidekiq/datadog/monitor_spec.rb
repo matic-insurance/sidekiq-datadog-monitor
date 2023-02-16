@@ -15,9 +15,9 @@ RSpec.describe Sidekiq::Datadog::Monitor do
         expect(described_class).to have_received(:initialize!)
       end
 
-      it 'adds heartbeat listeners' do
+      it 'adds beat listeners' do
         allow(described_class).to receive(:send_metrics)
-        sidekiq_config.listeners[:heartbeat].call
+        sidekiq_config.listeners[:beat].call
         expect(described_class).to have_received(:send_metrics)
       end
 
@@ -29,23 +29,6 @@ RSpec.describe Sidekiq::Datadog::Monitor do
 
       it 'saves tags' do
         expect(described_class.tags_builder.build({})).to eq(['test: true'])
-      end
-    end
-
-    context 'with new sidekiq' do
-      before do
-        sidekiq_config.options[:lifecycle_events][:beat] = []
-        described_class.configure!({ agent_host: 'host', agent_port: 'port', tags: ['test: true'] })
-      end
-
-      it 'adds beat listener' do
-        allow(described_class).to receive(:send_metrics)
-        sidekiq_config.listeners[:beat].call
-        expect(described_class).to have_received(:send_metrics)
-      end
-
-      it 'not adds heartbeat' do
-        expect(sidekiq_config.listeners[:heartbeat]).to be_nil
       end
     end
 
