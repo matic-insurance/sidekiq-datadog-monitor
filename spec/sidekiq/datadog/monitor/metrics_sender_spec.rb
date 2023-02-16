@@ -43,7 +43,7 @@ RSpec.describe Sidekiq::Datadog::Monitor::MetricsSender do
 
   it 'posts process utilization' do
     metric = 'sidekiq.process.utilization'
-    expect(statsd).to have_received(:gauge).with(metric, 0.4, { tags: %w[process_id:123] })
-    expect(statsd).to have_received(:gauge).with(metric, 1, { tags: %w[process_id:234 process_tag:busy] })
+    expect(statsd).to have_received(:gauge).with(metric, 40.0, { tags: %w[process_id:123] })
+    expect(statsd).to have_received(:gauge).with(metric, 100.0, { tags: %w[process_id:234 process_tag:busy] })
   end
 end
