@@ -33,10 +33,11 @@ module Sidekiq
         end
 
         def send_metrics
-          sender.send_metrics
+          sender&.send_metrics
         end
 
         def shutdown!
+          @sender = nil # Remove sender first so beat event after shutdown does not raising error
           statsd.close
         end
 
