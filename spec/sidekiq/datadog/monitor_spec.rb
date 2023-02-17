@@ -77,6 +77,14 @@ RSpec.describe Sidekiq::Datadog::Monitor do
       described_class.send_metrics
       expect(described_class.sender).to have_received(:send_metrics)
     end
+
+    it 'does not send after shutdown' do
+      sender = described_class.sender
+      allow(sender).to receive(:send_metrics)
+      described_class.shutdown!
+      described_class.send_metrics
+      expect(sender).not_to have_received(:send_metrics)
+    end
   end
 
   describe '.shutdown!' do
