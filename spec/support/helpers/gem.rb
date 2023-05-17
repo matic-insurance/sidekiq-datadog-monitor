@@ -26,11 +26,11 @@ end
 RSpec.configure do |config|
   config.include(Helpers::Gem)
 
-  config.before(:each) do
+  config.before do
     allow(Sidekiq).to receive(:configure_server).and_yield(sidekiq_config)
   end
 
-  config.after(:each) do
+  config.after do
     Sidekiq::Datadog::Monitor.send(:reset!)
     sidekiq_config.reset!
   end
