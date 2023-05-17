@@ -85,6 +85,26 @@ RSpec.describe Sidekiq::Datadog::Monitor do
       described_class.send_metrics
       expect(sender).not_to have_received(:send_metrics)
     end
+
+    context 'when sender hasnt started' do
+      before do
+        allow(described_class.sender).to receive(:send_metrics).and_raise(ArgumentError, 'Start sender first')
+      end
+
+      it 'handling exception' do
+        expect { described_class.send_metrics }.not_to raise_error
+      end
+    end
+
+    context 'when sender throws error' do
+      before do
+        allow(described_class.sender).to receive(:send_metrics).and_raise('Some error')
+      end
+
+      it 'handling exception' do
+        expect { described_class.send_metrics }.to raise_error('Some error')
+      end
+    end
   end
 
   describe '.shutdown!' do

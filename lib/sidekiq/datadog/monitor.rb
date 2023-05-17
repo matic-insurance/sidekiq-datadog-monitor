@@ -34,6 +34,11 @@ module Sidekiq
 
         def send_metrics
           sender&.send_metrics
+        rescue ArgumentError => e
+          # Ignore this error. Sometimes sender hasn't yet started when we send metrics for the first time on boot
+          return if sender && e.message == 'Start sender first'
+
+          raise
         end
 
         def shutdown!
@@ -54,15 +59,9 @@ module Sidekiq
           Sidekiq.configure_server do |config|
             patch_sidekiq_heartbeat(config)
 
-            config.on(:startup) do
-              Sidekiq::Datadog::Monitor.initialize!
-            end
-            config.on(:beat) do
-              Sidekiq::Datadog::Monitor.send_metrics
-            end
-            config.on(:shutdown) do
-              Sidekiq::Datadog::Monitor.shutdown!
-            end
+            config.on(:startup) { Sidekiq::Datadog::Monitor.initialize! }
+            config.on(:beat) { Sidekiq::Datadog::Monitor.send_metrics }
+            config.on(:shutdown) { Sidekiq::Datadog::Monitor.shutdown! }
           end
         end
 
