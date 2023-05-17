@@ -2,7 +2,7 @@ module Sidekiq
   module Datadog
     module Monitor
       class TagBuilder
-        SPECIAL_SYMBOLS = /[\/\.:]/i.freeze
+        SPECIAL_SYMBOLS = %r{[/.:]}i.freeze
         def initialize(common_tags)
           @common_tags = common_tags
         end
