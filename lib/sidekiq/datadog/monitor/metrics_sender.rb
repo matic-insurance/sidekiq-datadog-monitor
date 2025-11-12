@@ -18,6 +18,7 @@ module Sidekiq
             post_process_stats(process)
           end
           post_scheduled_stats
+          post_deadset_stats
         end
 
         protected
@@ -38,7 +39,11 @@ module Sidekiq
 
         def post_scheduled_stats
           scheduled_size = Sidekiq::Stats.new.scheduled_size
-          statsd.gauge('sidekiq.scheduled.size', scheduled_size, tags: tags_builder.build({}))
+          statsd.gauge('sidekiq.scheduled.size', scheduled_size, tags: tags_builder.build)
+        end
+
+        def post_deadset_stats
+          statsd.gauge('sidekiq.dead_set.size', Sidekiq::DeadSet.new.size, tags: tags_builder.build)
         end
       end
     end
