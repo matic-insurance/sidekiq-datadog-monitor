@@ -35,8 +35,11 @@ module Sidekiq
         def send_metrics
           sender&.send_metrics
         rescue ArgumentError => e
-          # Ignore this error. Sometimes sender hasn't yet started when we send metrics for the first time on boot
-          return if sender && e.message == 'Start sender first'
+          # Ignore this error. The statsd sender may not be started yet (first beat on boot) or may have
+          # already been stopped (a beat racing with shutdown!, which closes statsd and nils @sender).
+          # We must not re-check @sender here: during the shutdown race it is already nil, which would
+          # let the harmless error escape into the Sidekiq error handler.
+          return if e.message == 'Start sender first'
 
           raise
         end

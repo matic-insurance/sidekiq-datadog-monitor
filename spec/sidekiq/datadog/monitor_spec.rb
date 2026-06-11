@@ -96,6 +96,21 @@ RSpec.describe Sidekiq::Datadog::Monitor do
       end
     end
 
+    context 'when sender raises after shutdown niled it (beat/shutdown race)' do
+      before do
+        # The beat passes the `sender&.` guard, then shutdown! runs concurrently: it nils @sender and
+        # closes statsd, so the in-flight gauge call raises 'Start sender first'.
+        allow(described_class.sender).to receive(:send_metrics) do
+          described_class.instance_variable_set(:@sender, nil)
+          raise ArgumentError, 'Start sender first'
+        end
+      end
+
+      it 'handling exception' do
+        expect { described_class.send_metrics }.not_to raise_error
+      end
+    end
+
     context 'when sender throws error' do
       before do
         allow(described_class.sender).to receive(:send_metrics).and_raise('Some error')
